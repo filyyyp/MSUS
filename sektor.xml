@@ -14,7 +14,7 @@
         <name>system</name>
     </role>
     <!-- DATA -->
-    <data type="number">
+    <data type="text">
         <id>sectorId</id>
         <title>Id sektoru</title>
     </data>
@@ -95,6 +95,19 @@
                 <behavior>editable</behavior>
             </logic>
         </dataRef>
+        <dataRef>
+            <id>sectorId</id>
+            <logic>
+                <behavior>required</behavior>
+                <behavior>editable</behavior>
+            </logic>
+        </dataRef>
+        <dataRef>
+            <id>goodsList</id>
+            <logic>
+                <behavior>editable</behavior>
+            </logic>
+        </dataRef>
 	</transition>
     <transition>
         <id>8</id>
@@ -133,8 +146,8 @@
                     goodsName: f.goodsName,
                     goodsOwner: f.goodsOwner,
                     <!--TODO PRIDAT EXPIRACIU-->
-                    goodsId: f.goodsId;
-                    <!--goodsList: f.goodsList;-->
+                    goodsId: f.goodsId,
+                    goodsList: f.goodsList;
 
 
                     <!--nazov tovaru-->
@@ -203,6 +216,20 @@
                 <perform>true</perform>
             </logic>
         </roleRef>
+        <event type="finish">
+            <id>1</id>
+            <actions phase="post">
+                <action>
+                    goodsList: f.goodsList,
+                    goodsName: f.goodsName;
+
+                    change goodsList choices{
+                        return goodsList.choices - [(goodsName.value as String)];
+                    }
+
+                </action>
+            </actions>
+        </event>
     </transition>
 	<!-- PLACES -->
 	<place>
@@ -226,7 +253,7 @@
         <x>479</x>
         <y>338</y>
         <label></label>
-        <tokens>6</tokens>
+        <tokens>0</tokens>
         <static>false</static>
     </place>
 	<!-- ARCS -->
@@ -263,7 +290,8 @@
         <type>inhibitor</type>
         <sourceId>10</sourceId>
         <destinationId>8</destinationId>
-        <multiplicity>30</multiplicity>
+        <!--TODO DYNAMICKA KAPACITA SKLADU-->
+        <multiplicity>5</multiplicity>
     </arc>
     <arc>
         <id>14</id>

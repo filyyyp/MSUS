@@ -48,6 +48,43 @@
         </action>
     </data>
 
+    <data type="date">
+        <id>expirationDateExtend</id>
+        <title>Predlzit do:</title>
+    </data>
+
+    <data type="enumeration">
+        <id>monthsEnumExtend</id>
+        <title>Pocet mesiacov</title>
+        <values>1</values>
+        <values>2</values>
+        <values>3</values>
+        <values>4</values>
+        <values>5</values>
+        <values>6</values>
+
+        <action trigger="set">
+            date: f.expirationDateExtend,
+            en: f.this,
+            actualExpiration: f.expirationDate,
+            price: f.price;
+
+            change date value {
+            def d2
+            use (groovy.time.TimeCategory) {
+
+            d2 = Date.from(actualExpiration.value.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant())  + (en.value.defaultValue as int).months
+
+            }
+            return d2
+            }
+
+            change price value{
+            return 20 * (en.value.defaultValue as int)
+            }
+        </action>
+    </data>
+
     <data type="text">
         <id>goodsId</id>
         <title>Id tovaru</title>
@@ -71,7 +108,7 @@
     </data>
     <data type="text">
         <id>sectorTitle</id>
-        <title>Id sektoru</title>
+        <title>Title sektoru</title>
     </data>
 
     <data type="enumeration">
@@ -137,6 +174,140 @@
                 <perform>true</perform>
             </logic>
         </roleRef>
+        <dataRef>
+            <id>monthsEnumExtend</id>
+            <logic>
+                <behavior>editable</behavior>
+            </logic>
+        </dataRef>
+        <dataRef>
+            <id>expirationDate</id>
+            <logic>
+                <behavior>visible</behavior>
+            </logic>
+        </dataRef>
+        <dataRef>
+            <id>expirationDateExtend</id>
+            <logic>
+                <behavior>visible</behavior>
+            </logic>
+        </dataRef>
+        <dataRef>
+            <id>price</id>
+            <logic>
+                <behavior>visible</behavior>
+            </logic>
+        </dataRef>
+        <dataRef>
+            <id>platba</id>
+            <logic>
+                <behavior>editable</behavior>
+                <action trigger="set">
+                    login: f.login,
+                    heslo: f.heslo,
+                    menoPlatitela: f.idPlatitel,
+                    validacneCislo: f.validacneCislo,
+                    expiracia: f.expiracia,
+                    cisloKarty: f.cisloKarty,
+                    platba: f.this,
+                    trans: t.this;
+
+                    make login,hidden on trans when {
+                    return (platba.value.defaultValue as String) == "platba kartou";
+                    }
+                    make heslo,hidden on trans when {
+                    return (platba.value.defaultValue as String) == "platba kartou";
+                    }
+
+
+                    make cisloKarty,editable on trans when {
+                    return (platba.value.defaultValue as String) == "platba kartou";
+                    }
+                    make menoPlatitela,editable on trans when {
+                    return (platba.value.defaultValue as String) == "platba kartou";
+                    }
+                    make validacneCislo,editable on trans when {
+                    return (platba.value.defaultValue as String) == "platba kartou";
+                    }
+                    make expiracia,editable on trans when {
+                    return (platba.value.defaultValue as String) == "platba kartou";
+                    }
+
+
+                    make login,editable on trans when {
+                    return (platba.value.defaultValue as String) == "paypall";
+                    }
+                    make heslo,editable on trans when {
+                    return (platba.value.defaultValue as String) == "paypall";
+                    }
+
+
+                    make cisloKarty,hidden on trans when {
+                    return (platba.value.defaultValue as String) == "paypall";
+                    }
+                    make menoPlatitela,hidden on trans when {
+                    return (platba.value.defaultValue as String) == "paypall";
+                    }
+                    make validacneCislo,hidden on trans when {
+                    return (platba.value.defaultValue as String) == "paypall";
+                    }
+                    make expiracia,hidden on trans when {
+                    return (platba.value.defaultValue as String) == "paypall";
+                    }
+                </action>
+            </logic>
+        </dataRef>
+        <dataRef>
+            <id>login</id>
+            <logic>
+                <behavior>hidden</behavior>
+            </logic>
+        </dataRef>
+        <dataRef>
+            <id>heslo</id>
+            <logic>
+                <behavior>hidden</behavior>
+            </logic>
+        </dataRef>
+        <dataRef>
+            <id>idPlatitel</id>
+            <logic>
+                <behavior>hidden</behavior>
+            </logic>
+        </dataRef>
+        <dataRef>
+            <id>cisloKarty</id>
+            <logic>
+                <behavior>hidden</behavior>
+            </logic>
+        </dataRef>
+        <dataRef>
+            <id>expiracia</id>
+            <logic>
+                <behavior>hidden</behavior>
+            </logic>
+        </dataRef>
+        <dataRef>
+            <id>validacneCislo</id>
+            <logic>
+                <behavior>hidden</behavior>
+            </logic>
+        </dataRef>
+        <event type="finish">
+            <id>1</id>
+            <actions phase="pre">
+                <action trigger="set">
+                    newExpiration: f.expirationDateExtend,
+                    actualExpiration: f.expirationDate;
+
+                    change actualExpiration value{
+                        return newExpiration.value
+                    }
+                </action>
+            </actions>
+        </event>
+
+
 	</transition>
 	<transition>
 		<id>8</id>
@@ -293,6 +464,12 @@
             </logic>
         </dataRef>
         <dataRef>
+            <id>sectorId</id>
+            <logic>
+                <behavior>visible</behavior>
+            </logic>
+        </dataRef>
+        <dataRef>
             <id>goodsName</id>
             <logic>
                 <behavior>visible</behavior>
@@ -322,6 +499,33 @@
                 <perform>true</perform>
             </logic>
         </roleRef>
+        <event type="finish">
+            <id>1</id>
+            <actions phase="pre">
+                <action>
+                    goodsName: f.goodsName,
+                    sectorId: f.sectorId,
+                    sectorTitle: f.sectorTitle;
+
+                    def task = findTask({it.transitionId.eq("9").and(it.caseId.eq(sectorId.value as String))})
+                    <!--def task = findTask({it.transitionId.eq("9").and(it.title.eq(sectorTitle.value as String))})-->
+                    taskService.assignTask(task.stringId)
+
+                    setData(task,[
+                        "goodsName": [
+                        "value": goodsName.value,
+                        "type": "text"
+                        ]
+                    ])
+
+                    taskService.finishTask(task.stringId)
+
+
+
+
+                </action>
+            </actions>
+        </event>
 	</transition>
 	<transition>
 		<id>16</id>

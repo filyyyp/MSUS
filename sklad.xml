@@ -28,7 +28,7 @@
         <id>stockCapacity</id>
         <title>Kapacita</title>
     </data>
-    <data type="number">
+    <data type="text">
         <id>sectorId</id>
         <title>Id sektoru</title>
     </data>
@@ -150,11 +150,11 @@
             <actions phase="pre">
                 <action>
                     stockTitle: f.stockTitle,
-                    caseid: f.stockId,
+                    sectorId: f.sectorId,
                     sectorNames: f.sectorNames;
 
                     def sectorC = createCase("Team9--sek",stockTitle.value)
-                    change caseid value {
+                    change sectorId value {
                     sectorC.stringId
                     }
 
@@ -163,12 +163,11 @@
                     }
                 </action>
                 <action>
-                    caseid: f.stockId,
                     sectorId: f.sectorId,
                     stockTitle: f.stockTitle,
                     stockCapacity: f.stockCapacity;
 
-                    def task = findTask({it.transitionId.eq("2").and(it.caseId.eq(caseid.value as String))})
+                    def task = findTask({it.transitionId.eq("2").and(it.caseId.eq(sectorId.value as String))})
 
                     taskService.assignTask(task.stringId)
                     setData(task,[
@@ -179,6 +178,10 @@
                         "sectorCapacity": [
                             "value": stockCapacity.value,
                             "type": "number"
+                        ],
+                        "sectorId": [
+                        "value": sectorId.value,
+                        "type": "text"
                         ]
                     ])
                     taskService.finishTask(task.stringId)
