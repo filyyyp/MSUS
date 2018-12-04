@@ -41,7 +41,7 @@
     </data>
     <data type="enumeration">
         <id>goodsList</id>
-        <title>Zoznam tovarov</title>
+        <title>Zoznam tovaru</title>
     </data>
     <!-- TRANSITIONS -->
 	<transition>
@@ -96,13 +96,6 @@
             </logic>
         </dataRef>
         <dataRef>
-            <id>sectorId</id>
-            <logic>
-                <behavior>required</behavior>
-                <behavior>editable</behavior>
-            </logic>
-        </dataRef>
-        <dataRef>
             <id>goodsList</id>
             <logic>
                 <behavior>editable</behavior>
@@ -145,15 +138,9 @@
                 <action>
                     goodsName: f.goodsName,
                     goodsOwner: f.goodsOwner,
-                    <!--TODO PRIDAT EXPIRACIU-->
                     goodsId: f.goodsId,
                     goodsList: f.goodsList;
 
-
-                    <!--nazov tovaru-->
-                    <!--datum expiracie-->
-                    <!--id skladu-->
-                    <!--id sektoru-->
 
                     def goodsCase = createCase("Team9--tvr",goodsName.value)
                     change goodsId value {
@@ -166,7 +153,6 @@
 
                 </action>
                 <action>
-                    <!--sectorNames.value.defaultValue TODO TOTO BOLO VYBRANE Z LISTU-->
                     sectorId: f.sectorId,
                     sectorTitle: f.sectorTitle,
                     goodsId: f.goodsId,
@@ -256,6 +242,15 @@
         <tokens>0</tokens>
         <static>false</static>
     </place>
+    <place>
+        <id>11</id>
+        <x>281</x>
+        <y>370</y>
+        <label></label>
+        <!--KAPACITA SKLADU-->
+        <tokens>5</tokens>
+        <static>false</static>
+    </place>
 	<!-- ARCS -->
 	<arc>
 		<id>5</id>
@@ -278,21 +273,21 @@
 		<destinationId>3</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
-    <arc>
-        <id>12</id>
-        <type>read</type>
-        <sourceId>10</sourceId>
-        <destinationId>9</destinationId>
-        <multiplicity>1</multiplicity>
-    </arc>
-    <arc>
-        <id>13</id>
-        <type>inhibitor</type>
-        <sourceId>10</sourceId>
-        <destinationId>8</destinationId>
-        <!--TODO DYNAMICKA KAPACITA SKLADU-->
-        <multiplicity>5</multiplicity>
-    </arc>
+    <!--<arc>-->
+        <!--<id>12</id>-->
+        <!--<type>read</type>-->
+        <!--<sourceId>10</sourceId>-->
+        <!--<destinationId>9</destinationId>-->
+        <!--<multiplicity>1</multiplicity>-->
+    <!--</arc>-->
+    <!--<arc>-->
+        <!--<id>13</id>-->
+        <!--<type>inhibitor</type>-->
+        <!--<sourceId>10</sourceId>-->
+        <!--<destinationId>8</destinationId>-->
+        <!--&lt;!&ndash;TODO DYNAMICKA KAPACITA SKLADU&ndash;&gt;-->
+        <!--<multiplicity>5</multiplicity>-->
+    <!--</arc>-->
     <arc>
         <id>14</id>
         <type>regular</type>
@@ -323,4 +318,20 @@
         <destinationId>9</destinationId>
         <multiplicity>1</multiplicity>
     </arc>
+
+    <arc>
+        <id>18</id>
+        <type>regular</type>
+        <sourceId>11</sourceId>
+        <destinationId>8</destinationId>
+        <multiplicity>1</multiplicity>
+    </arc>
+    <arc>
+        <id>19</id>
+        <type>regular</type>
+        <sourceId>9</sourceId>
+        <destinationId>11</destinationId>
+        <multiplicity>1</multiplicity>
+    </arc>
+
 </document>

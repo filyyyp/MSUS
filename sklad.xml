@@ -28,6 +28,8 @@
         <id>stockCapacity</id>
         <title>Kapacita</title>
     </data>
+
+
     <data type="text">
         <id>sectorId</id>
         <title>Id sektoru</title>
@@ -40,6 +42,7 @@
         <id>sectorNames</id>
         <title>Sektory nazvy</title>
     </data>
+
 
     <data type="text">
         <id>goodsName</id>
@@ -82,34 +85,21 @@
         <dataGroup>
             <id>1</id>
             <dataRef>
-                <id>stockId</id>
-                <logic><behavior>visible</behavior></logic>
-            </dataRef>
-            <dataRef>
                 <id>stockName</id>
                 <logic>
                     <behavior>editable</behavior>
+                    <behavior>required</behavior>
                 </logic>
             </dataRef>
             <dataRef>
                 <id>stockAddress</id>
                 <logic>
-                    <behavior>visible</behavior>
                     <behavior>editable</behavior>
                     <behavior>required</behavior>
                 </logic>
             </dataRef>
 
         </dataGroup>
-        <!--<event type="finish">-->
-            <!--<id>1</id>-->
-            <!--<actions phase="pre">-->
-                <!--<action>-->
-                    <!--sID: f.stockId;-->
-                    <!---->
-                <!--</action>-->
-            <!--</actions>-->
-        <!--</event>-->
 	</transition>
 	<transition>
 		<id>6</id>
@@ -124,12 +114,6 @@
         </roleRef>
         <dataGroup>
             <id>1</id>
-            <dataRef>
-                <id>stockId</id>
-                <logic>
-                    <behavior>visible</behavior>
-                </logic>
-            </dataRef>
             <dataRef>
                 <id>stockTitle</id>
                 <logic>
@@ -298,34 +282,6 @@
                     ])
                     taskService.finishTask(task.stringId)
                 </action>
-
-                <!--<action>-->
-                <!--stockTitle: f.stockTitle;-->
-
-                <!--def usecase = findCase({ it.title("Pridaj sektor") }).first()-->
-                <!--def forestTask = findTask({it.title("Pridaj sektor").and(it.caseId.eq(usecase.stringId))})-->
-                <!--def task = findTask({ it.importId.eq("control") & it.caseId.eq(usecase.stringId) })-->
-
-                <!--assignTask("Pridaj sektor",sectorC)-->
-                <!--assignTask(sectorC)-->
-
-
-                <!--assignTask("6", loggedUser(), usecase)-->
-                <!--setData(sectorC,["title": stockTitle.value, "capacity": stockCapacity.value])-->
-                <!--finishTask(sectorC)-->
-
-
-
-
-                <!--change sectorIds choices{-->
-                <!--return sectorIds.choices + case.stringId-->
-                <!--}-->
-
-                <!--change sectorNames choices{-->
-                <!--return sectorNames.choices + stockTitle.value-->
-                <!--}-->
-
-                <!--</action>-->
             </actions>
         </event>
     </transition>

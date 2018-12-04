@@ -108,7 +108,7 @@
     </data>
     <data type="text">
         <id>sectorTitle</id>
-        <title>Title sektoru</title>
+        <title>Ulozene sektore</title>
     </data>
 
     <data type="enumeration">
@@ -162,6 +162,29 @@
                 <perform>true</perform>
             </logic>
         </roleRef>
+        <event type="finish">
+            <id>1</id>
+            <actions phase="pre">
+                <action>
+                    goodsName: f.goodsName,
+                    sectorId: f.sectorId,
+                    sectorTitle: f.sectorTitle;
+
+                    def task = findTask({it.transitionId.eq("9").and(it.caseId.eq(sectorId.value as String))})
+                    taskService.assignTask(task.stringId)
+
+                    setData(task,[
+                    "goodsName": [
+                    "value": goodsName.value,
+                    "type": "text"
+                    ]
+                    ])
+
+                    taskService.finishTask(task.stringId)
+
+                </action>
+            </actions>
+        </event>
 	</transition>
 	<transition>
 		<id>4</id>
@@ -178,6 +201,7 @@
             <id>monthsEnumExtend</id>
             <logic>
                 <behavior>editable</behavior>
+                <behavior>required</behavior>
             </logic>
         </dataRef>
         <dataRef>
@@ -324,6 +348,7 @@
             <id>monthsEnum</id>
             <logic>
                 <behavior>editable</behavior>
+                <behavior>required</behavior>
             </logic>
         </dataRef>
         <dataRef>
@@ -464,12 +489,6 @@
             </logic>
         </dataRef>
         <dataRef>
-            <id>sectorId</id>
-            <logic>
-                <behavior>visible</behavior>
-            </logic>
-        </dataRef>
-        <dataRef>
             <id>goodsName</id>
             <logic>
                 <behavior>visible</behavior>
@@ -508,7 +527,6 @@
                     sectorTitle: f.sectorTitle;
 
                     def task = findTask({it.transitionId.eq("9").and(it.caseId.eq(sectorId.value as String))})
-                    <!--def task = findTask({it.transitionId.eq("9").and(it.title.eq(sectorTitle.value as String))})-->
                     taskService.assignTask(task.stringId)
 
                     setData(task,[
@@ -519,9 +537,6 @@
                     ])
 
                     taskService.finishTask(task.stringId)
-
-
-
 
                 </action>
             </actions>
@@ -562,6 +577,29 @@
                 <perform>true</perform>
             </logic>
         </roleRef>
+        <event type="finish">
+            <id>1</id>
+            <actions phase="pre">
+                <action>
+                    goodsName: f.goodsName,
+                    sectorId: f.sectorId,
+                    sectorTitle: f.sectorTitle;
+
+                    def task = findTask({it.transitionId.eq("9").and(it.caseId.eq(sectorId.value as String))})
+                    taskService.assignTask(task.stringId)
+
+                    setData(task,[
+                    "goodsName": [
+                    "value": goodsName.value,
+                    "type": "text"
+                    ]
+                    ])
+
+                    taskService.finishTask(task.stringId)
+
+                </action>
+            </actions>
+        </event>
 	</transition>
 	<transition>
 		<id>29</id>
