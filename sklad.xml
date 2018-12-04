@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="petriflow_schema.xsd.xml">
+<!--<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://modeler.netgrif.com/petriflow_schema.xsd">-->
+
+    <!-- ROLES -->
+    <role>
+        <id>employee</id>
+        <name>zamestnanec</name>
+    </role>
+    <!-- DATA -->
+    <data type="text">
+        <id>stockId</id>
+        <title>Id skladu</title>
+    </data>
+    <data type="text">
+        <id>stockName</id>
+        <title>Názov skladu</title>
+    </data>
+    <data type="text">
+        <id>stockAddress</id>
+        <title>Adresa skladu</title>
+    </data>
+    <data type="text">
+        <id>stockTitle</id>
+        <title>Nazov sektoru</title>
+    </data>
+    <data type="number">
+        <id>stockCapacity</id>
+        <title>Kapacita</title>
+    </data>
+    <data type="number">
+        <id>sectorId</id>
+        <title>Id sektoru</title>
+    </data>
+    <data type="enumeration">
+        <id>sectorIds</id>
+        <title>Sektory id</title>
+    </data>
+    <data type="enumeration">
+        <id>sectorNames</id>
+        <title>Sektory nazvy</title>
+    </data>
+
+    <data type="text">
+        <id>goodsName</id>
+        <title>Nazov tovaru</title>
+    </data>
+    <data type="text">
+        <id>goodsOwner</id>
+        <title>Majitel</title>
+    </data>
+    <data type="text">
+        <id>goodsAmount</id>
+        <title>Mnozstvo tovaru</title>
+    </data>
+    <data type="text">
+        <id>goodsId</id>
+        <title>Id tovaru</title>
+    </data>
+    <data type="enumeration">
+        <id>goodsList</id>
+        <title>Zoznam tovarov</title>
+    </data>
+
+
+
+
+
+
+	<!-- TRANSITIONS -->
+	<transition>
+		<id>1</id>
+		<x>180</x>
+		<y>100</y>
+		<label>Vytvor sklad</label>
+        <roleRef>
+            <id>employee</id>
+            <logic>
+                <perform>true</perform>
+            </logic>
+        </roleRef>
+        <dataGroup>
+            <id>1</id>
+            <dataRef>
+                <id>stockId</id>
+                <logic><behavior>visible</behavior></logic>
+            </dataRef>
+            <dataRef>
+                <id>stockName</id>
+                <logic>
+                    <behavior>editable</behavior>
+                </logic>
+            </dataRef>
+            <dataRef>
+                <id>stockAddress</id>
+                <logic>
+                    <behavior>visible</behavior>
+                    <behavior>editable</behavior>
+                    <behavior>required</behavior>
+                </logic>
+            </dataRef>
+
+        </dataGroup>
+        <!--<event type="finish">-->
+            <!--<id>1</id>-->
+            <!--<actions phase="pre">-->
+                <!--<action>-->
+                    <!--sID: f.stockId;-->
+                    <!---->
+                <!--</action>-->
+            <!--</actions>-->
+        <!--</event>-->
+	</transition>
+	<transition>
+		<id>6</id>
+		<x>300</x>
+		<y>20</y>
+		<label>Pridaj sektor</label>
+        <roleRef>
+            <id>employee</id>
+            <logic>
+                <perform>true</perform>
+            </logic>
+        </roleRef>
+        <dataGroup>
+            <id>1</id>
+            <dataRef>
+                <id>stockId</id>
+                <logic>
+                    <behavior>visible</behavior>
+                </logic>
+            </dataRef>
+            <dataRef>
+                <id>stockTitle</id>
+                <logic>
+                    <behavior>required</behavior>
+                    <behavior>editable</behavior>
+                </logic>
+            </dataRef>
+            <dataRef>
+                <id>stockCapacity</id>
+                <logic>
+                    <behavior>required</behavior>
+                    <behavior>editable</behavior>
+                </logic>
+            </dataRef>
+        </dataGroup>
+        <event type="finish">
+            <id>1</id>
+            <actions phase="pre">
+                <action>
+                    stockTitle: f.stockTitle,
+                    caseid: f.stockId,
+                    sectorNames: f.sectorNames;
+
+                    def sectorC = createCase("Team9--sek",stockTitle.value)
+                    change caseid value {
+                    sectorC.stringId
+                    }
+
+                    change sectorNames choices{
+                        return sectorNames.choices + [(stockTitle.value as String)];
+                    }
+                </action>
+                <action>
+                    caseid: f.stockId,
+                    sectorId: f.sectorId,
+                    stockTitle: f.stockTitle,
+                    stockCapacity: f.stockCapacity;
+
+                    def task = findTask({it.transitionId.eq("2").and(it.caseId.eq(caseid.value as String))})
+
+                    taskService.assignTask(task.stringId)
+                    setData(task,[
+                        "sectorTitle": [
+                            "value": stockTitle.value,
+                            "type": "text"
+                        ],
+                        "sectorCapacity": [
+                            "value": stockCapacity.value,
+                            "type": "number"
+                        ]
+                    ])
+                    taskService.finishTask(task.stringId)
+                </action>
+
+                <!--<action>-->
+                    <!--stockTitle: f.stockTitle;-->
+
+                    <!--def usecase = findCase({ it.title("Pridaj sektor") }).first()-->
+                    <!--def forestTask = findTask({it.title("Pridaj sektor").and(it.caseId.eq(usecase.stringId))})-->
+                    <!--def task = findTask({ it.importId.eq("control") & it.caseId.eq(usecase.stringId) })-->
+
+                    <!--assignTask("Pridaj sektor",sectorC)-->
+                    <!--assignTask(sectorC)-->
+
+
+                    <!--assignTask("6", loggedUser(), usecase)-->
+                    <!--setData(sectorC,["title": stockTitle.value, "capacity": stockCapacity.value])-->
+                    <!--finishTask(sectorC)-->
+
+
+
+
+                    <!--change sectorIds choices{-->
+                        <!--return sectorIds.choices + case.stringId-->
+                    <!--}-->
+
+                    <!--change sectorNames choices{-->
+                        <!--return sectorNames.choices + stockTitle.value-->
+                    <!--}-->
+
+                <!--</action>-->
+            </actions>
+        </event>
+	</transition>
+	<transition>
+		<id>8</id>
+		<x>380</x>
+		<y>100</y>
+		<label>Dokončiť</label>
+	</transition>
+	<transition>
+		<id>12</id>
+		<x>580</x>
+		<y>100</y>
+		<label>info</label>
+	</transition>
+    <!--TODO VYMAZAT USKLADNI TOVAR ZO SKLADU-->
+    <transition>
+        <id>13</id>
+        <x>565</x>
+        <y>174</y>
+        <label>Uskladni tovar</label>
+        <dataGroup>
+            <id>1</id>
+            <dataRef>
+                <id>sectorNames</id>
+                <logic>
+                    <behavior>editable</behavior>
+                </logic>
+            </dataRef>
+        </dataGroup>
+        <event type="finish">
+            <id>1</id>
+            <actions phase="pre">
+                <action>
+                    goodsName: f.goodsName,
+                    goodsOwner: f.goodsOwner,
+                    goodsAmount: f.goodsAmount,
+                    goodsId: f.goodsId,
+
+                    sectorNames: f.sectorNames,
+
+                    goodsList: f.goodsList;
+
+
+                    <!--nazov tovaru-->
+                    <!--mnozstvo tovaru-->
+                    <!--id tovaru-->
+                    <!--datum expiracie-->
+                    <!--id skladu-->
+                    <!--id sektoru-->
+
+                    def stockCase = createCase("Team9--tov",goodsName.value)
+                    change goodsId value {
+                        stockCase.stringId
+                    }
+
+                    change goodsList choices{
+                        return goodsList.choices + [(goodsName.value as String)];
+                    }
+                    <!--TODO odcitat pocet tovaru od sektoru-->
+                </action>
+                <action>
+                    goodsId: f.goodsId,
+
+                    <!--sectorNames.value.defaultValue TODO TOTO BOLO VYBRANE Z LISTU-->
+                    sectorId: f.sectorId,
+                    stockTitle: f.stockTitle,
+                    stockCapacity: f.stockCapacity;
+
+                    def task = findTask({it.transitionId.eq("46").and(it.caseId.eq(goodsId.value as String))})
+
+                    taskService.assignTask(task.stringId)
+                    setData(task,[
+                    "sectorTitle": [
+                    "value": stockTitle.value,
+                    "type": "text"
+                    ],
+                    "sectorCapacity": [
+                    "value": stockCapacity.value,
+                    "type": "number"
+                    ]
+                    ])
+                    taskService.finishTask(task.stringId)
+                </action>
+
+                <!--<action>-->
+                <!--stockTitle: f.stockTitle;-->
+
+                <!--def usecase = findCase({ it.title("Pridaj sektor") }).first()-->
+                <!--def forestTask = findTask({it.title("Pridaj sektor").and(it.caseId.eq(usecase.stringId))})-->
+                <!--def task = findTask({ it.importId.eq("control") & it.caseId.eq(usecase.stringId) })-->
+
+                <!--assignTask("Pridaj sektor",sectorC)-->
+                <!--assignTask(sectorC)-->
+
+
+                <!--assignTask("6", loggedUser(), usecase)-->
+                <!--setData(sectorC,["title": stockTitle.value, "capacity": stockCapacity.value])-->
+                <!--finishTask(sectorC)-->
+
+
+
+
+                <!--change sectorIds choices{-->
+                <!--return sectorIds.choices + case.stringId-->
+                <!--}-->
+
+                <!--change sectorNames choices{-->
+                <!--return sectorNames.choices + stockTitle.value-->
+                <!--}-->
+
+                <!--</action>-->
+            </actions>
+        </event>
+    </transition>
+	<!-- PLACES -->
+	<place>
+		<id>2</id>
+		<x>60</x>
+		<y>100</y>
+		<label></label>
+		<tokens>1</tokens>
+		<static>false</static>
+	</place>
+	<place>
+		<id>4</id>
+		<x>300</x>
+		<y>100</y>
+		<label></label>
+		<tokens>0</tokens>
+		<static>false</static>
+	</place>
+	<place>
+		<id>10</id>
+		<x>473</x>
+		<y>100</y>
+		<label></label>
+		<tokens>0</tokens>
+		<static>false</static>
+	</place>
+	<!-- ARCS -->
+	<arc>
+		<id>3</id>
+		<type>regular</type>
+		<sourceId>2</sourceId>
+		<destinationId>1</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>5</id>
+		<type>regular</type>
+		<sourceId>1</sourceId>
+		<destinationId>4</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>7</id>
+		<type>read</type>
+		<sourceId>4</sourceId>
+		<destinationId>6</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>9</id>
+		<type>regular</type>
+		<sourceId>4</sourceId>
+		<destinationId>8</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>13</id>
+		<type>read</type>
+		<sourceId>10</sourceId>
+		<destinationId>12</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>14</id>
+		<type>regular</type>
+		<sourceId>8</sourceId>
+		<destinationId>10</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+    <arc>
+        <id>15</id>
+        <type>read</type>
+        <sourceId>10</sourceId>
+        <destinationId>13</destinationId>
+        <multiplicity>1</multiplicity>
+    </arc>
+</document>

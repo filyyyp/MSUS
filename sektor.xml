@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://modeler.netgrif.com/petriflow_schema.xsd">
+    <!-- ROLES -->
+    <role>
+        <id>employee</id>
+        <name>zamestnanec</name>
+    </role>
+    <role>
+        <id>customer</id>
+        <name>zakaznik</name>
+    </role>
+    <role>
+        <id>system</id>
+        <name>system</name>
+    </role>
+    <!-- DATA -->
+    <data type="number">
+        <id>sectorId</id>
+        <title>Id sektoru</title>
+    </data>
+    <data type="text">
+        <id>sectorTitle</id>
+        <title>Nazov sektoru</title>
+    </data>
+    <data type="number">
+        <id>sectorCapacity</id>
+        <title>Kapacita</title>
+    </data>
+    <!--DATA TOVAR-->
+    <data type="text">
+        <id>goodsName</id>
+        <title>Nazov tovaru</title>
+    </data>
+    <data type="text">
+        <id>goodsOwner</id>
+        <title>Majitel</title>
+    </data>
+    <data type="text">
+        <id>goodsId</id>
+        <title>Id tovaru</title>
+    </data>
+    <data type="enumeration">
+        <id>goodsList</id>
+        <title>Zoznam tovarov</title>
+    </data>
+    <!-- TRANSITIONS -->
+	<transition>
+		<id>2</id>
+		<x>220</x>
+		<y>140</y>
+		<label>Vytvor sektor</label>
+        <roleRef>
+            <id>employee</id>
+            <logic>
+                <perform>true</perform>
+            </logic>
+        </roleRef>
+        <dataRef>
+            <id>sectorTitle</id>
+            <logic>
+                <behavior>required</behavior>
+                <behavior>editable</behavior>
+            </logic>
+        </dataRef>
+        <dataRef>
+            <id>sectorCapacity</id>
+            <logic>
+                <behavior>required</behavior>
+                <behavior>editable</behavior>
+            </logic>
+        </dataRef>
+	</transition>
+	<transition>
+		<id>4</id>
+		<x>460</x>
+		<y>140</y>
+		<label>info</label>
+        <roleRef>
+            <id>employee</id>
+            <logic>
+                <perform>true</perform>
+            </logic>
+        </roleRef>
+        <dataRef>
+            <id>sectorTitle</id>
+            <logic>
+                <behavior>required</behavior>
+                <behavior>editable</behavior>
+            </logic>
+        </dataRef>
+        <dataRef>
+            <id>sectorCapacity</id>
+            <logic>
+                <behavior>required</behavior>
+                <behavior>editable</behavior>
+            </logic>
+        </dataRef>
+	</transition>
+    <transition>
+        <id>8</id>
+        <x>392</x>
+        <y>304</y>
+        <label>Pridaj tovar</label>
+        <roleRef>
+            <id>customer</id>
+            <logic>
+                <perform>true</perform>
+            </logic>
+        </roleRef>
+
+        <dataGroup>
+            <id>1</id>
+            <dataRef>
+                <id>goodsName</id>
+                <logic>
+                    <behavior>required</behavior>
+                    <behavior>editable</behavior>
+                </logic>
+            </dataRef>
+            <dataRef>
+                <id>goodsOwner</id>
+                <logic>
+                    <behavior>required</behavior>
+                    <behavior>editable</behavior>
+                </logic>
+            </dataRef>
+        </dataGroup>
+
+        <event type="finish">
+            <id>1</id>
+            <actions phase="pre">
+                <action>
+                    goodsName: f.goodsName,
+                    goodsOwner: f.goodsOwner,
+                    <!--TODO PRIDAT EXPIRACIU-->
+                    goodsId: f.goodsId;
+                    <!--goodsList: f.goodsList;-->
+
+
+                    <!--nazov tovaru-->
+                    <!--datum expiracie-->
+                    <!--id skladu-->
+                    <!--id sektoru-->
+
+                    def goodsCase = createCase("Team9--tvr",goodsName.value)
+                    change goodsId value {
+                    goodsCase.stringId
+                    }
+
+                    change goodsList choices{
+                    return goodsList.choices + [(goodsName.value as String)];
+                    }
+
+                </action>
+                <action>
+                    <!--sectorNames.value.defaultValue TODO TOTO BOLO VYBRANE Z LISTU-->
+                    sectorId: f.sectorId,
+                    sectorTitle: f.sectorTitle,
+                    goodsId: f.goodsId,
+                    goodsName: f.goodsName,
+                    goodsOwner: f.goodsOwner;
+
+
+                    def task = findTask({it.transitionId.eq("46").and(it.caseId.eq(goodsId.value as String))})
+
+                    taskService.assignTask(task.stringId)
+                    setData(task,[
+                        "sectorTitle": [
+                        "value": sectorTitle.value,
+                        "type": "text"
+                        ],
+                        "sectorId": [
+                        "value": sectorId.value,
+                        "type": "text"
+                        ],
+                        "goodsId": [
+                        "value": goodsId.value,
+                        "type": "text"
+                        ],
+                        "goodsName": [
+                        "value": goodsName.value,
+                        "type": "text"
+                        ],
+                        "goodsOwner": [
+                        "value": goodsOwner.value,
+                        "type": "text"
+                        ]
+                    ])
+                    taskService.finishTask(task.stringId)
+                </action>
+            </actions>
+        </event>
+    </transition>
+
+    <transition>
+        <id>9</id>
+        <x>387</x>
+        <y>384</y>
+        <label>Odstran tovar</label>
+        <roleRef>
+            <id>system</id>
+            <logic>
+                <perform>true</perform>
+            </logic>
+        </roleRef>
+    </transition>
+	<!-- PLACES -->
+	<place>
+		<id>1</id>
+		<x>100</x>
+		<y>140</y>
+		<label></label>
+		<tokens>1</tokens>
+		<static>false</static>
+	</place>
+	<place>
+		<id>3</id>
+		<x>300</x>
+		<y>140</y>
+		<label></label>
+		<tokens>0</tokens>
+		<static>false</static>
+	</place>
+    <place>
+        <id>10</id>
+        <x>479</x>
+        <y>338</y>
+        <label></label>
+        <tokens>6</tokens>
+        <static>false</static>
+    </place>
+	<!-- ARCS -->
+	<arc>
+		<id>5</id>
+		<type>read</type>
+		<sourceId>3</sourceId>
+		<destinationId>4</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>6</id>
+		<type>regular</type>
+		<sourceId>1</sourceId>
+		<destinationId>2</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+	<arc>
+		<id>7</id>
+		<type>regular</type>
+		<sourceId>2</sourceId>
+		<destinationId>3</destinationId>
+		<multiplicity>1</multiplicity>
+	</arc>
+    <arc>
+        <id>12</id>
+        <type>read</type>
+        <sourceId>10</sourceId>
+        <destinationId>9</destinationId>
+        <multiplicity>1</multiplicity>
+    </arc>
+    <arc>
+        <id>13</id>
+        <type>inhibitor</type>
+        <sourceId>10</sourceId>
+        <destinationId>8</destinationId>
+        <multiplicity>30</multiplicity>
+    </arc>
+    <arc>
+        <id>14</id>
+        <type>regular</type>
+        <sourceId>8</sourceId>
+        <destinationId>10</destinationId>
+        <multiplicity>1</multiplicity>
+        <breakPoint><x>452</x><y>273</y></breakPoint>
+    </arc>
+    <arc>
+        <id>15</id>
+        <type>regular</type>
+        <sourceId>10</sourceId>
+        <destinationId>9</destinationId>
+        <multiplicity>1</multiplicity>
+        <breakPoint><x>471</x><y>411</y></breakPoint>
+    </arc>
+    <arc>
+        <id>16</id>
+        <type>read</type>
+        <sourceId>3</sourceId>
+        <destinationId>8</destinationId>
+        <multiplicity>1</multiplicity>
+    </arc>
+    <arc>
+        <id>17</id>
+        <type>read</type>
+        <sourceId>3</sourceId>
+        <destinationId>9</destinationId>
+        <multiplicity>1</multiplicity>
+    </arc>
+</document>
