@@ -66,13 +66,6 @@
                 <behavior>editable</behavior>
             </logic>
         </dataRef>
-        <!--<dataRef>-->
-            <!--<id>sectorCapacity</id>-->
-            <!--<logic>-->
-                <!--<behavior>required</behavior>-->
-                <!--<behavior>editable</behavior>-->
-            <!--</logic>-->
-        <!--</dataRef>-->
 	</transition>
 	<transition>
 		<id>4</id>
@@ -97,13 +90,6 @@
                 <behavior>visible</behavior>
             </logic>
         </dataRef>
-        <!--<dataRef>-->
-            <!--<id>sectorCapacity</id>-->
-            <!--<logic>-->
-                <!--<behavior>required</behavior>-->
-                <!--<behavior>editable</behavior>-->
-            <!--</logic>-->
-        <!--</dataRef>-->
         <dataRef>
             <id>goodsList</id>
             <logic>

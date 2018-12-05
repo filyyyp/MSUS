@@ -9,6 +9,9 @@
         <id>customer</id>
         <name>zakaznik</name>
     </role>
+
+
+    <!-- DATA -->
     <data type="date">
         <id>expirationDate</id>
         <title>Datum expiracie:</title>
@@ -670,8 +673,9 @@
                 <behavior>editable</behavior>
             </logic>
         </dataRef>
-
 	</transition>
+
+
 	<!-- PLACES -->
 	<place>
 		<id>5</id>
@@ -729,6 +733,8 @@
 		<tokens>1</tokens>
 		<static>false</static>
 	</place>
+
+
 	<!-- ARCS -->
 	<arc>
 		<id>12</id>

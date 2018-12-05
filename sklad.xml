@@ -7,6 +7,8 @@
         <id>employee</id>
         <name>zamestnanec</name>
     </role>
+
+
     <!-- DATA -->
     <data type="text">
         <id>stockId</id>
@@ -29,7 +31,6 @@
         <title>Kapacita</title>
     </data>
 
-
     <data type="text">
         <id>sectorId</id>
         <title>Id sektoru</title>
@@ -46,7 +47,6 @@
         <id>sectorTitle</id>
         <title>Nazov sektoru</title>
     </data>
-
 
     <data type="text">
         <id>goodsName</id>
@@ -68,6 +68,8 @@
         <id>goodsList</id>
         <title>Zoznam tovarov</title>
     </data>
+
+
 	<!-- TRANSITIONS -->
 	<transition>
 		<id>1</id>
@@ -119,13 +121,6 @@
                     <behavior>editable</behavior>
                 </logic>
             </dataRef>
-            <!--<dataRef>-->
-                <!--<id>stockCapacity</id>-->
-                <!--<logic>-->
-                    <!--<behavior>required</behavior>-->
-                    <!--<behavior>editable</behavior>-->
-                <!--</logic>-->
-            <!--</dataRef>-->
         </dataGroup>
         <event type="finish">
             <id>1</id>
@@ -170,48 +165,9 @@
                     taskService.finishTask(task.stringId)
                 </action>
 
-                <!--<action>-->
-                    <!--stockTitle: f.stockTitle;-->
-
-                    <!--def usecase = findCase({ it.title("Pridaj sektor") }).first()-->
-                    <!--def forestTask = findTask({it.title("Pridaj sektor").and(it.caseId.eq(usecase.stringId))})-->
-                    <!--def task = findTask({ it.importId.eq("control") & it.caseId.eq(usecase.stringId) })-->
-
-                    <!--assignTask("Pridaj sektor",sectorC)-->
-                    <!--assignTask(sectorC)-->
-
-
-                    <!--assignTask("6", loggedUser(), usecase)-->
-                    <!--setData(sectorC,["title": stockTitle.value, "capacity": stockCapacity.value])-->
-                    <!--finishTask(sectorC)-->
-
-
-
-
-                    <!--change sectorIds choices{-->
-                        <!--return sectorIds.choices + case.stringId-->
-                    <!--}-->
-
-                    <!--change sectorNames choices{-->
-                        <!--return sectorNames.choices + stockTitle.value-->
-                    <!--}-->
-
-                <!--</action>-->
             </actions>
         </event>
 	</transition>
-	<!--<transition>-->
-		<!--<id>8</id>-->
-		<!--<x>380</x>-->
-		<!--<y>100</y>-->
-		<!--<label>Dokončiť[E]</label>-->
-        <!--<roleRef>-->
-            <!--<id>employee</id>-->
-            <!--<logic>-->
-                <!--<perform>true</perform>-->
-            <!--</logic>-->
-        <!--</roleRef>-->
-	<!--</transition>-->
 	<transition>
 		<id>12</id>
 		<x>580</x>
@@ -224,77 +180,8 @@
             </logic>
         </roleRef>
 	</transition>
-    <!--<transition>-->
-        <!--<id>13</id>-->
-        <!--<x>565</x>-->
-        <!--<y>174</y>-->
-        <!--<label>Uskladni tovar</label>-->
-        <!--<dataGroup>-->
-            <!--<id>1</id>-->
-            <!--<dataRef>-->
-                <!--<id>sectorNames</id>-->
-                <!--<logic>-->
-                    <!--<behavior>editable</behavior>-->
-                <!--</logic>-->
-            <!--</dataRef>-->
-        <!--</dataGroup>-->
-        <!--<event type="finish">-->
-            <!--<id>1</id>-->
-            <!--<actions phase="pre">-->
-                <!--<action>-->
-                    <!--goodsName: f.goodsName,-->
-                    <!--goodsOwner: f.goodsOwner,-->
-                    <!--goodsAmount: f.goodsAmount,-->
-                    <!--goodsId: f.goodsId,-->
-
-                    <!--sectorNames: f.sectorNames,-->
-
-                    <!--goodsList: f.goodsList;-->
 
 
-                    <!--&lt;!&ndash;nazov tovaru&ndash;&gt;-->
-                    <!--&lt;!&ndash;mnozstvo tovaru&ndash;&gt;-->
-                    <!--&lt;!&ndash;id tovaru&ndash;&gt;-->
-                    <!--&lt;!&ndash;datum expiracie&ndash;&gt;-->
-                    <!--&lt;!&ndash;id skladu&ndash;&gt;-->
-                    <!--&lt;!&ndash;id sektoru&ndash;&gt;-->
-
-                    <!--def stockCase = createCase("Team9&#45;&#45;tov",goodsName.value)-->
-                    <!--change goodsId value {-->
-                        <!--stockCase.stringId-->
-                    <!--}-->
-
-                    <!--change goodsList choices{-->
-                        <!--return goodsList.choices + [(goodsName.value as String)];-->
-                    <!--}-->
-                    <!--&lt;!&ndash;TODO odcitat pocet tovaru od sektoru&ndash;&gt;-->
-                <!--</action>-->
-                <!--<action>-->
-                    <!--goodsId: f.goodsId,-->
-
-                    <!--&lt;!&ndash;sectorNames.value.defaultValue TODO TOTO BOLO VYBRANE Z LISTU&ndash;&gt;-->
-                    <!--sectorId: f.sectorId,-->
-                    <!--stockTitle: f.stockTitle,-->
-                    <!--stockCapacity: f.stockCapacity;-->
-
-                    <!--def task = findTask({it.transitionId.eq("46").and(it.caseId.eq(goodsId.value as String))})-->
-
-                    <!--taskService.assignTask(task.stringId)-->
-                    <!--setData(task,[-->
-                    <!--"sectorTitle": [-->
-                    <!--"value": stockTitle.value,-->
-                    <!--"type": "text"-->
-                    <!--],-->
-                    <!--"sectorCapacity": [-->
-                    <!--"value": stockCapacity.value,-->
-                    <!--"type": "number"-->
-                    <!--]-->
-                    <!--])-->
-                    <!--taskService.finishTask(task.stringId)-->
-                <!--</action>-->
-            <!--</actions>-->
-        <!--</event>-->
-    <!--</transition>-->
 	<!-- PLACES -->
 	<place>
 		<id>2</id>
@@ -312,6 +199,8 @@
 		<tokens>0</tokens>
 		<static>false</static>
 	</place>
+
+
 	<!-- ARCS -->
 	<arc>
 		<id>3</id>
@@ -334,7 +223,6 @@
 		<destinationId>6</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
-
 	<arc>
 		<id>13</id>
 		<type>read</type>
