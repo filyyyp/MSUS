@@ -147,6 +147,7 @@
                 <action>
                     sectorId: f.sectorId,
                     sectorTitle: f.sectorTitle,
+                    stockTitle: f.stockTitle,
                     stockCapacity: f.stockCapacity;
 
                     def task = findTask({it.transitionId.eq("2").and(it.caseId.eq(sectorId.value as String))})
@@ -158,8 +159,12 @@
                             "type": "text"
                         ],
                         "sectorId": [
-                        "value": sectorId.value,
-                        "type": "text"
+                            "value": sectorId.value,
+                            "type": "text"
+                        ],
+                        "stockTitle": [
+                            "value": stockTitle.value,
+                            "type": "text"
                         ]
                     ])
                     taskService.finishTask(task.stringId)

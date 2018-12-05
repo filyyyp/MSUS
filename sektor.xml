@@ -15,6 +15,10 @@
     </role>
     <!-- DATA -->
     <data type="text">
+        <id>stockTitle</id>
+        <title>Umiestneny v sklade</title>
+    </data>
+    <data type="text">
         <id>sectorId</id>
         <title>Id sektoru</title>
     </data>
@@ -62,13 +66,13 @@
                 <behavior>editable</behavior>
             </logic>
         </dataRef>
-        <dataRef>
-            <id>sectorCapacity</id>
-            <logic>
-                <behavior>required</behavior>
-                <behavior>editable</behavior>
-            </logic>
-        </dataRef>
+        <!--<dataRef>-->
+            <!--<id>sectorCapacity</id>-->
+            <!--<logic>-->
+                <!--<behavior>required</behavior>-->
+                <!--<behavior>editable</behavior>-->
+            <!--</logic>-->
+        <!--</dataRef>-->
 	</transition>
 	<transition>
 		<id>4</id>
@@ -81,6 +85,12 @@
                 <perform>true</perform>
             </logic>
         </roleRef>
+        <dataRef>
+            <id>stockTitle</id>
+            <logic>
+                <behavior>visible</behavior>
+            </logic>
+        </dataRef>
         <dataRef>
             <id>sectorTitle</id>
             <logic>
@@ -154,6 +164,7 @@
                 <action>
                     sectorId: f.sectorId,
                     sectorTitle: f.sectorTitle,
+                    stockTitle: f.stockTitle,
                     goodsId: f.goodsId,
                     goodsName: f.goodsName,
                     goodsOwner: f.goodsOwner;
@@ -182,6 +193,10 @@
                         "goodsOwner": [
                         "value": goodsOwner.value,
                         "type": "text"
+                        ],
+                        "stockTitle": [
+                            "value": stockTitle.value,
+                            "type": "text"
                         ]
                     ])
                     taskService.finishTask(task.stringId)
