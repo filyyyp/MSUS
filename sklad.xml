@@ -22,7 +22,7 @@
     </data>
     <data type="text">
         <id>stockTitle</id>
-        <title>Nazov sektoru</title>
+        <title>Nazov skladu</title>
     </data>
     <data type="number">
         <id>stockCapacity</id>
@@ -41,6 +41,10 @@
     <data type="enumeration">
         <id>sectorNames</id>
         <title>Sektory nazvy</title>
+    </data>
+    <data type="text">
+        <id>sectorTitle</id>
+        <title>Nazov sektoru</title>
     </data>
 
 
@@ -79,7 +83,7 @@
         <dataGroup>
             <id>1</id>
             <dataRef>
-                <id>stockName</id>
+                <id>stockTitle</id>
                 <logic>
                     <behavior>editable</behavior>
                     <behavior>required</behavior>
@@ -109,7 +113,7 @@
         <dataGroup>
             <id>1</id>
             <dataRef>
-                <id>stockTitle</id>
+                <id>sectorTitle</id>
                 <logic>
                     <behavior>required</behavior>
                     <behavior>editable</behavior>
@@ -127,22 +131,22 @@
             <id>1</id>
             <actions phase="pre">
                 <action>
-                    stockTitle: f.stockTitle,
+                    sectorTitle: f.sectorTitle,
                     sectorId: f.sectorId,
                     sectorNames: f.sectorNames;
 
-                    def sectorC = createCase("Team9--sek",stockTitle.value)
+                    def sectorC = createCase("Team9--sek",sectorTitle.value)
                     change sectorId value {
-                    sectorC.stringId
+                        sectorC.stringId
                     }
 
                     change sectorNames choices{
-                        return sectorNames.choices + [(stockTitle.value as String)];
+                        return sectorNames.choices + [(sectorTitle.value as String)];
                     }
                 </action>
                 <action>
                     sectorId: f.sectorId,
-                    stockTitle: f.stockTitle,
+                    sectorTitle: f.sectorTitle,
                     stockCapacity: f.stockCapacity;
 
                     def task = findTask({it.transitionId.eq("2").and(it.caseId.eq(sectorId.value as String))})
@@ -150,13 +154,9 @@
                     taskService.assignTask(task.stringId)
                     setData(task,[
                         "sectorTitle": [
-                            "value": stockTitle.value,
+                            "value": sectorTitle.value,
                             "type": "text"
                         ],
-                        <!--"sectorCapacity": [-->
-                            <!--"value": stockCapacity.value,-->
-                            <!--"type": "number"-->
-                        <!--],-->
                         "sectorId": [
                         "value": sectorId.value,
                         "type": "text"
