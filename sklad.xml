@@ -195,18 +195,18 @@
             </actions>
         </event>
 	</transition>
-	<transition>
-		<id>8</id>
-		<x>380</x>
-		<y>100</y>
-		<label>Dokončiť[E]</label>
-        <roleRef>
-            <id>employee</id>
-            <logic>
-                <perform>true</perform>
-            </logic>
-        </roleRef>
-	</transition>
+	<!--<transition>-->
+		<!--<id>8</id>-->
+		<!--<x>380</x>-->
+		<!--<y>100</y>-->
+		<!--<label>Dokončiť[E]</label>-->
+        <!--<roleRef>-->
+            <!--<id>employee</id>-->
+            <!--<logic>-->
+                <!--<perform>true</perform>-->
+            <!--</logic>-->
+        <!--</roleRef>-->
+	<!--</transition>-->
 	<transition>
 		<id>12</id>
 		<x>580</x>
@@ -307,14 +307,6 @@
 		<tokens>0</tokens>
 		<static>false</static>
 	</place>
-	<place>
-		<id>10</id>
-		<x>473</x>
-		<y>100</y>
-		<label></label>
-		<tokens>0</tokens>
-		<static>false</static>
-	</place>
 	<!-- ARCS -->
 	<arc>
 		<id>3</id>
@@ -337,32 +329,13 @@
 		<destinationId>6</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
-	<arc>
-		<id>9</id>
-		<type>regular</type>
-		<sourceId>4</sourceId>
-		<destinationId>8</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
+
 	<arc>
 		<id>13</id>
 		<type>read</type>
-		<sourceId>10</sourceId>
+		<sourceId>4</sourceId>
 		<destinationId>12</destinationId>
 		<multiplicity>1</multiplicity>
 	</arc>
-	<arc>
-		<id>14</id>
-		<type>regular</type>
-		<sourceId>8</sourceId>
-		<destinationId>10</destinationId>
-		<multiplicity>1</multiplicity>
-	</arc>
-    <!--<arc>-->
-        <!--<id>15</id>-->
-        <!--<type>read</type>-->
-        <!--<sourceId>10</sourceId>-->
-        <!--<destinationId>13</destinationId>-->
-        <!--<multiplicity>1</multiplicity>-->
-    <!--</arc>-->
+
 </document>
